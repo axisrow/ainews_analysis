@@ -1,0 +1,48 @@
+# Web scraping and data collection
+requests
+beautifulsoup4
+newspaper3k
+feedparser
+selenium
+
+# NLP and text analysis
+spacy
+nltk
+transformers
+torch
+scikit-learn
+textblob
+google-genai[aiohttp]
+
+# Data processing and analysis
+pandas
+numpy
+scipy
+
+# Database
+sqlalchemy
+
+# Visualization and dashboard
+matplotlib
+seaborn
+plotly
+streamlit
+wordcloud
+
+# Reddit scraping
+praw
+
+# Utilities
+python-dotenv
+tqdm
+schedule
+loguru
+python-dateutil
+
+# Development tools
+pytest
+black
+flake8
+mypy
+jupyter
+ipykernel
