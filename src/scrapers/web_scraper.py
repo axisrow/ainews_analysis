@@ -6,6 +6,7 @@ from urllib.parse import urljoin, urlparse
 import logging
 from datetime import datetime
 import hashlib
+from .date_extractor import DateExtractor
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,9 @@ class WebScraper:
         self.delay = config.get('delay_between_requests', 2)
         self.max_retries = config.get('max_retries', 3)
         self.backoff_factor = config.get('backoff_factor', 2)
+        
+        # Initialize date extractor
+        self.date_extractor = DateExtractor(max_age_days=config.get('max_article_age_days', 90))
         
     def scrape_site(self, site_config: Dict) -> List[Dict]:
         """Scrape a single news site for AI articles with retry logic"""
@@ -135,10 +139,17 @@ class WebScraper:
                     article['url'].encode()
                 ).hexdigest()
             
-            # Extract publish date if available
-            date_elem = element.select_one('time')
-            if date_elem:
-                article['published_date'] = date_elem.get('datetime')
+            # Extract publish date using enhanced date extractor
+            extracted_date = self.date_extractor.extract_date(article.get('url', ''), element)
+            if extracted_date:
+                article['published_date'] = extracted_date.isoformat()
+                article['date_extraction_attempted'] = True
+            else:
+                article['date_extraction_attempted'] = True
+                article['needs_manual_review'] = True
+                logger.debug(f"Could not extract date for article: {article.get('title', 'Unknown')}")
+                
+            # Note: Date extractor already filters old articles, so no additional age check needed here
             
             return article if 'title' in article and 'url' in article else None
             
@@ -214,4 +225,24 @@ class WebScraper:
             
         except Exception as e:
             logger.error(f"Error fetching article content from {url}: {str(e)}")
+            return None
+    
+    def extract_date_from_full_page(self, url: str) -> Optional[datetime]:
+        """Extract publication date from full article page"""
+        try:
+            response = self.session.get(url, timeout=self.timeout)
+            response.raise_for_status()
+            
+            # Handle encoding properly
+            if response.encoding is None:
+                response.encoding = 'utf-8'
+            
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            # Use enhanced date extractor on full page
+            extracted_date = self.date_extractor.extract_date(url, soup)
+            return extracted_date
+            
+        except Exception as e:
+            logger.error(f"Error extracting date from full page {url}: {str(e)}")
             return None

@@ -36,24 +36,41 @@ def run_dashboard(config: dict):
     db_stats = db.get_statistics()
     total_articles_in_db = db_stats['total_articles']
     
+    # Count articles with dates (simpler approach)
+    articles_with_dates_count = len([a for a in db.get_articles(limit=1000) if a.get('published_date')])
+    
     # Date filter
     st.sidebar.subheader("Filters")
-    st.sidebar.info(f"📊 Total articles in database: **{total_articles_in_db}**")
+    st.sidebar.info(f"📊 Total articles: **{total_articles_in_db}**")
+    st.sidebar.info(f"📅 Articles with dates: **{articles_with_dates_count}**")
     
-    # Default to show all data (or last year)
-    default_start = datetime.now() - timedelta(days=365)
-    if db_stats['date_range']['earliest']:
+    # Use the full available date range from all articles with dates
+    default_start = datetime.now() - timedelta(days=365)  # Default to last year
+    default_end = datetime.now()
+    
+    # Get actual date range from all articles with dates
+    if db_stats['date_range']['earliest'] and db_stats['date_range']['latest']:
         try:
-            earliest = datetime.fromisoformat(db_stats['date_range']['earliest'].replace('Z', '+00:00'))
-            default_start = min(default_start, earliest)
-        except:
-            pass
+            all_earliest = datetime.fromisoformat(db_stats['date_range']['earliest'].replace('Z', '+00:00'))
+            all_latest = datetime.fromisoformat(db_stats['date_range']['latest'].replace('Z', '+00:00'))
+            
+            # Use the full range of available data as default
+            default_start = all_earliest.date()
+            default_end = all_latest.date()
+            
+            # Show data range info
+            days_span = (all_latest - all_earliest).days + 1
+            st.sidebar.info(f"📊 Data range: {all_earliest.strftime('%Y-%m-%d')} to {all_latest.strftime('%Y-%m-%d')} ({days_span} days)")
+            
+        except Exception as e:
+            st.sidebar.error(f"Error parsing date range: {e}")
     
     date_range = st.sidebar.date_input(
         "Date Range",
-        value=(default_start.date(), datetime.now().date()),
+        value=(default_start, default_end),
         max_value=datetime.now()
     )
+    
     
     # Source filter
     sources = db.get_sources()
@@ -69,9 +86,13 @@ def run_dashboard(config: dict):
         options=["All", "Positive", "Negative", "Neutral"]
     )
     
+    
     # Main content
     st.title("AI News Research Dashboard")
     st.markdown("Real-time analysis of AI news and trends")
+    
+    # Show simple data summary
+    st.info(f"📊 Showing all articles with publication dates from the selected time range")
     
     # Get filtered articles
     articles = db.get_articles(
@@ -85,27 +106,30 @@ def run_dashboard(config: dict):
     if selected_sources:
         articles = [a for a in articles if a['source'] in selected_sources]
     
+    # Simple filtering: just show all articles with dates
+    articles_with_dates = [a for a in articles if a.get('published_date')]
+    
     # Overview metrics
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        filtered_count = len(articles)
+        filtered_count = len(articles_with_dates)
         delta_msg = f"of {total_articles_in_db} total"
-        st.metric("Filtered Articles", filtered_count, delta=delta_msg)
+        st.metric("Articles with Dates", filtered_count, delta=delta_msg)
     
     with col2:
-        unique_sources = len(set(a['source'] for a in articles))
+        unique_sources = len(set(a['source'] for a in articles_with_dates))
         total_sources = len(db.get_sources())
         delta_sources = f"of {total_sources} total"
         st.metric("Active Sources", unique_sources, delta=delta_sources)
     
     with col3:
-        avg_sentiment = calculate_average_sentiment(articles)
+        avg_sentiment = calculate_average_sentiment(articles_with_dates)
         st.metric("Avg Sentiment", f"{avg_sentiment:.2f}", 
                  delta=f"{'Positive' if avg_sentiment > 0 else 'Negative'}")
     
     with col4:
-        today_articles = len([a for a in articles 
+        today_articles = len([a for a in articles_with_dates 
                             if a.get('published_date') and 
                             a['published_date'][:10] == datetime.now().strftime('%Y-%m-%d')])
         st.metric("Today's Articles", today_articles)
@@ -117,22 +141,22 @@ def run_dashboard(config: dict):
     )
     
     with tab1:
-        show_overview(articles, db)
+        show_overview(articles_with_dates, db)
     
     with tab2:
-        show_sentiment_analysis(articles)
+        show_sentiment_analysis(articles_with_dates)
     
     with tab3:
-        show_topics_entities(articles)
+        show_topics_entities(articles_with_dates)
     
     with tab4:
-        show_trends(articles)
+        show_trends(articles_with_dates)
     
     with tab5:
-        show_genai_insights(articles)
+        show_genai_insights(articles_with_dates)
     
     with tab6:
-        show_articles(articles)
+        show_articles(articles_with_dates)
 
 
 def calculate_average_sentiment(articles):
@@ -361,7 +385,7 @@ def show_genai_insights(articles):
     st.subheader("🤖 Google GenAI Analysis")
     
     # Filter articles with GenAI analysis
-    genai_articles = [a for a in articles if 'genai_analysis' in a]
+    genai_articles = [a for a in articles if a is not None and 'genai_analysis' in a and a.get('genai_analysis') is not None]
     
     if not genai_articles:
         st.info("📝 No GenAI analysis available yet. To enable:")
@@ -408,9 +432,11 @@ python main.py --analyze
         st.subheader("📈 Significance Scores")
         scores = []
         for article in genai_articles:
-            score = article.get('genai_analysis', {}).get('significance_score', 0)
-            if score:
-                scores.append(score)
+            genai_analysis = article.get('genai_analysis')
+            if genai_analysis and isinstance(genai_analysis, dict):
+                score = genai_analysis.get('significance_score', 0)
+                if score and isinstance(score, (int, float)):
+                    scores.append(score)
         
         if scores:
             fig = px.histogram(
@@ -427,9 +453,11 @@ python main.py --analyze
         complexity_counts = {'High': 0, 'Medium': 0, 'Low': 0}
         
         for article in genai_articles:
-            complexity = article.get('genai_analysis', {}).get('technical_complexity', 'unknown')
-            if complexity.capitalize() in complexity_counts:
-                complexity_counts[complexity.capitalize()] += 1
+            genai_analysis = article.get('genai_analysis')
+            if genai_analysis and isinstance(genai_analysis, dict):
+                complexity = genai_analysis.get('technical_complexity', 'unknown')
+                if isinstance(complexity, str) and complexity.capitalize() in complexity_counts:
+                    complexity_counts[complexity.capitalize()] += 1
         
         if any(complexity_counts.values()):
             fig = px.pie(
@@ -450,9 +478,11 @@ python main.py --analyze
     
     innovation_counts = {'Breakthrough': 0, 'Incremental': 0, 'Maintenance': 0}
     for article in genai_articles:
-        innovation = article.get('genai_analysis', {}).get('innovation_level', 'unknown')
-        if innovation.capitalize() in innovation_counts:
-            innovation_counts[innovation.capitalize()] += 1
+        genai_analysis = article.get('genai_analysis')
+        if genai_analysis and isinstance(genai_analysis, dict):
+            innovation = genai_analysis.get('innovation_level', 'unknown')
+            if isinstance(innovation, str) and innovation.capitalize() in innovation_counts:
+                innovation_counts[innovation.capitalize()] += 1
     
     with col1:
         st.metric("🚀 Breakthrough", innovation_counts['Breakthrough'])
@@ -465,8 +495,11 @@ python main.py --analyze
     st.subheader("🎯 Key Insights")
     all_insights = []
     for article in genai_articles:
-        insights = article.get('genai_analysis', {}).get('key_insights', [])
-        all_insights.extend(insights)
+        genai_analysis = article.get('genai_analysis')
+        if genai_analysis and isinstance(genai_analysis, dict):
+            insights = genai_analysis.get('key_insights', [])
+            if isinstance(insights, list):
+                all_insights.extend(insights)
     
     if all_insights:
         insight_counts = {}
@@ -482,8 +515,11 @@ python main.py --analyze
     st.subheader("🌍 Impact Areas")
     all_impact_areas = []
     for article in genai_articles:
-        areas = article.get('genai_analysis', {}).get('impact_areas', [])
-        all_impact_areas.extend(areas)
+        genai_analysis = article.get('genai_analysis')
+        if genai_analysis and isinstance(genai_analysis, dict):
+            areas = genai_analysis.get('impact_areas', [])
+            if isinstance(areas, list):
+                all_impact_areas.extend(areas)
     
     if all_impact_areas:
         area_counts = {}
@@ -511,9 +547,11 @@ python main.py --analyze
     
     focus_counts = {'Research': 0, 'Commercial': 0, 'Both': 0}
     for article in genai_articles:
-        focus = article.get('genai_analysis', {}).get('research_vs_commercial', 'unknown')
-        if focus.capitalize() in focus_counts:
-            focus_counts[focus.capitalize()] += 1
+        genai_analysis = article.get('genai_analysis')
+        if genai_analysis and isinstance(genai_analysis, dict):
+            focus = genai_analysis.get('research_vs_commercial', 'unknown')
+            if isinstance(focus, str) and focus.capitalize() in focus_counts:
+                focus_counts[focus.capitalize()] += 1
     
     with col1:
         st.metric("🔬 Research", focus_counts['Research'])
@@ -529,18 +567,43 @@ python main.py --analyze
         
         # Calculate average scores for v2 articles
         v2_articles = [a for a in genai_articles if a.get('analysis_method') == 'genai_v2']
-        avg_significance = sum(a.get('genai_analysis', {}).get('significance_score', 0) for a in v2_articles) / len(v2_articles)
+        valid_scores = []
+        for a in v2_articles:
+            genai_analysis = a.get('genai_analysis')
+            if genai_analysis and isinstance(genai_analysis, dict):
+                score = genai_analysis.get('significance_score', 0)
+                if isinstance(score, (int, float)):
+                    valid_scores.append(score)
+        avg_significance = sum(valid_scores) / len(valid_scores) if valid_scores else 0
         
         with col1:
             st.metric("📊 Avg Significance", f"{avg_significance:.2f}")
         with col2:
-            high_impact = sum(1 for a in v2_articles if a.get('genai_analysis', {}).get('significance_score', 0) > 0.7)
+            high_impact = 0
+            for a in v2_articles:
+                genai_analysis = a.get('genai_analysis')
+                if genai_analysis and isinstance(genai_analysis, dict):
+                    score = genai_analysis.get('significance_score', 0)
+                    if isinstance(score, (int, float)) and score > 0.7:
+                        high_impact += 1
             st.metric("🔥 High Impact", high_impact)
         with col3:
-            breakthrough_count = sum(1 for a in v2_articles if a.get('genai_analysis', {}).get('innovation_level') == 'breakthrough')
+            breakthrough_count = 0
+            for a in v2_articles:
+                genai_analysis = a.get('genai_analysis')
+                if genai_analysis and isinstance(genai_analysis, dict):
+                    innovation = genai_analysis.get('innovation_level')
+                    if isinstance(innovation, str) and innovation.lower() == 'breakthrough':
+                        breakthrough_count += 1
             st.metric("💥 Breakthroughs", breakthrough_count)
         with col4:
-            high_complexity = sum(1 for a in v2_articles if a.get('genai_analysis', {}).get('technical_complexity') == 'high')
+            high_complexity = 0
+            for a in v2_articles:
+                genai_analysis = a.get('genai_analysis')
+                if genai_analysis and isinstance(genai_analysis, dict):
+                    complexity = genai_analysis.get('technical_complexity')
+                    if isinstance(complexity, str) and complexity.lower() == 'high':
+                        high_complexity += 1
             st.metric("🧠 High Complexity", high_complexity)
 
 
@@ -615,12 +678,14 @@ def show_articles(articles):
 
 # Helper functions
 def prepare_timeline_data(articles):
-    """Prepare timeline data for visualization"""
+    """Prepare timeline data for visualization - show all articles with dates"""
     timeline = {}
     for article in articles:
-        date = article.get('published_date', '')[:10]
-        if date:
-            timeline[date] = timeline.get(date, 0) + 1
+        # Show all articles with valid publication dates
+        if article.get('published_date'):
+            date = article['published_date'][:10]
+            if date:
+                timeline[date] = timeline.get(date, 0) + 1
     
     if timeline:
         df = pd.DataFrame(list(timeline.items()), columns=['Date', 'Count'])

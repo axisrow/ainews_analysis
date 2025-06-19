@@ -1,5 +1,5 @@
 import feedparser
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List, Dict, Optional, Any
 import logging
 import hashlib
@@ -12,6 +12,9 @@ class RSSFeedScraper:
     def __init__(self, config: Dict):
         self.config = config
         self.keywords = [kw.lower() for kw in config.get('search_keywords', [])]
+        rss_settings = config.get('rss_settings', {})
+        self.max_age_days = rss_settings.get('max_article_age_days', 7)
+        self.min_date = datetime.now() - timedelta(days=self.max_age_days)
         
     def parse_feed(self, feed_config: Dict) -> List[Dict]:
         """Parse a single RSS feed and extract AI-related articles with validation"""
@@ -78,10 +81,24 @@ class RSSFeedScraper:
                 article['summary'] = entry.description
             
             # Extract publish date
+            published_date = None
             if hasattr(entry, 'published_parsed'):
-                article['published_date'] = datetime(*entry.published_parsed[:6])
+                published_date = datetime(*entry.published_parsed[:6])
             elif hasattr(entry, 'updated_parsed'):
-                article['published_date'] = datetime(*entry.updated_parsed[:6])
+                published_date = datetime(*entry.updated_parsed[:6])
+            
+            if published_date:
+                # Check if article is too old
+                if published_date < self.min_date:
+                    logger.debug(f"Article too old ({published_date}): {article.get('title', 'Unknown')[:50]}")
+                    return None  # Skip old articles
+                
+                article['published_date'] = published_date
+                article['date_extraction_attempted'] = True
+            else:
+                # No date found in RSS entry
+                article['date_extraction_attempted'] = True
+                article['needs_manual_review'] = True
             
             # Extract author
             if hasattr(entry, 'author'):

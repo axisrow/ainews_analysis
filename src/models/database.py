@@ -6,6 +6,12 @@ import logging
 from typing import List, Dict, Optional
 import os
 from dateutil import parser as date_parser
+import sys
+from pathlib import Path
+
+# Add utils to path
+sys.path.append(str(Path(__file__).parent.parent))
+from utils.url_normalizer import URLNormalizer
 
 logger = logging.getLogger(__name__)
 
@@ -50,6 +56,10 @@ class Article(Base):
     analyzed = Column(Boolean, default=False)  # Flag to track if article has been analyzed
     genai_analysis = Column(JSON)  # GenAI analysis results
     
+    # Date extraction status
+    needs_manual_review = Column(Boolean, default=False)  # Flag for articles needing manual review
+    date_extraction_attempted = Column(Boolean, default=False)  # Flag to track date extraction attempts
+    
     def to_dict(self) -> Dict:
         """Convert article to dictionary"""
         return {
@@ -76,13 +86,16 @@ class Article(Base):
             'post_type': self.post_type,
             'tags': self.tags,
             'analyzed': self.analyzed,
-            'genai_analysis': self.genai_analysis
+            'genai_analysis': self.genai_analysis,
+            'needs_manual_review': self.needs_manual_review,
+            'date_extraction_attempted': self.date_extraction_attempted
         }
 
 
 class Database:
     def __init__(self, config: Dict):
         self.config = config
+        self.url_normalizer = URLNormalizer()
         
         # Create database directory if it doesn't exist
         db_path = config.get('path', 'data/ai_news.db')
@@ -124,6 +137,18 @@ class Database:
                 if 'genai_analysis' not in columns:
                     logger.info("Adding 'genai_analysis' column to articles table...")
                     conn.execute(text("ALTER TABLE articles ADD COLUMN genai_analysis JSON"))
+                    conn.commit()
+                
+                # Add needs_manual_review column if missing
+                if 'needs_manual_review' not in columns:
+                    logger.info("Adding 'needs_manual_review' column to articles table...")
+                    conn.execute(text("ALTER TABLE articles ADD COLUMN needs_manual_review BOOLEAN DEFAULT FALSE"))
+                    conn.commit()
+                
+                # Add date_extraction_attempted column if missing
+                if 'date_extraction_attempted' not in columns:
+                    logger.info("Adding 'date_extraction_attempted' column to articles table...")
+                    conn.execute(text("ALTER TABLE articles ADD COLUMN date_extraction_attempted BOOLEAN DEFAULT FALSE"))
                     conn.commit()
                     
                 logger.info("Database migrations completed successfully")
@@ -169,8 +194,23 @@ class Database:
             # Convert datetime fields from strings to datetime objects
             converted_data = self._convert_datetime_fields(article_data)
             
-            # Check if article exists by URL (more reliable than ID)
-            existing = session.query(Article).filter_by(url=converted_data.get('url')).first()
+            # Normalize URL for better duplicate detection
+            original_url = converted_data.get('url', '')
+            normalized_url = self.url_normalizer.normalize_url(original_url)
+            
+            # Check for duplicates using both original and normalized URLs
+            existing = session.query(Article).filter(
+                (Article.url == original_url) | 
+                (Article.url == normalized_url)
+            ).first()
+            
+            # If no exact match, check for equivalent URLs
+            if not existing and original_url != normalized_url:
+                all_articles = session.query(Article).all()
+                for article in all_articles:
+                    if self.url_normalizer.are_urls_equivalent(original_url, article.url):
+                        existing = article
+                        break
             
             if existing:
                 # Update existing article with new analysis data
@@ -236,7 +276,7 @@ class Database:
             if sentiment:
                 # This requires JSON query support
                 query = query.filter(
-                    Article.sentiment['sentiment'].astext == sentiment
+                    Article.sentiment['sentiment'].as_string() == sentiment
                 )
             
             # Order by published date descending
@@ -335,26 +375,53 @@ class Database:
         try:
             total_articles = session.query(Article).count()
             
+            # Count valid articles (not needing manual review)
+            valid_articles = session.query(Article).filter(
+                Article.needs_manual_review.isnot(True)
+            ).count()
+            
+            # Count articles needing manual review
+            manual_review_articles = session.query(Article).filter(
+                Article.needs_manual_review == True
+            ).count()
+            
             # Source distribution
             sources = session.query(
                 Article.source, 
                 Article.source_type
             ).distinct().all()
             
-            # Date range
-            date_range = session.query(
+            # Date range for ALL articles
+            all_date_range = session.query(
                 Article.published_date
+            ).filter(Article.published_date.isnot(None)).order_by(Article.published_date).all()
+            
+            all_earliest = all_date_range[0][0] if all_date_range else None
+            all_latest = all_date_range[-1][0] if all_date_range else None
+            
+            # Date range for VALID articles only
+            valid_date_range = session.query(
+                Article.published_date
+            ).filter(
+                Article.published_date.isnot(None),
+                Article.needs_manual_review.isnot(True)
             ).order_by(Article.published_date).all()
             
-            earliest_date = date_range[0][0] if date_range else None
-            latest_date = date_range[-1][0] if date_range else None
+            valid_earliest = valid_date_range[0][0] if valid_date_range else None
+            valid_latest = valid_date_range[-1][0] if valid_date_range else None
             
             return {
                 'total_articles': total_articles,
+                'valid_articles': valid_articles,
+                'manual_review_articles': manual_review_articles,
                 'sources': len(sources),
                 'date_range': {
-                    'earliest': earliest_date.isoformat() if earliest_date else None,
-                    'latest': latest_date.isoformat() if latest_date else None
+                    'earliest': all_earliest.isoformat() if all_earliest else None,
+                    'latest': all_latest.isoformat() if all_latest else None
+                },
+                'valid_date_range': {
+                    'earliest': valid_earliest.isoformat() if valid_earliest else None,
+                    'latest': valid_latest.isoformat() if valid_latest else None
                 }
             }
             

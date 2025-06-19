@@ -32,45 +32,31 @@ CONFIG = {
         "web_scraping": {
             "sites": [
                 {
-                    "name": "MIT Technology Review",
-                    "url": "https://www.technologyreview.com/artificial-intelligence/",
-                    "article_selector": "div.contentCard, article.teaserItem",
-                    "title_selector": "h3 a, h2 a, .teaserItem__title a",
-                    "content_selector": "p, .teaserItem__excerpt"
+                    "name": "AI News (Simple HTML)",
+                    "url": "https://www.artificialintelligence-news.com/",
+                    "article_selector": ".e-loop-item",
+                    "title_selector": "h1 a, h2 a, h3 a, .elementor-heading-title a",
+                    "content_selector": ".elementor-post-excerpt, .entry-summary, p"
                 },
                 {
-                    "name": "VentureBeat AI", 
-                    "url": "https://venturebeat.com/ai/",
-                    "article_selector": "article.ArticleListing, .ArticleCard",
-                    "title_selector": "h2 a, h3 a, .ArticleCard__title a",
-                    "content_selector": "p, .ArticleCard__excerpt"
-                },
-                {
-                    "name": "The Verge AI",
-                    "url": "https://www.theverge.com/ai-artificial-intelligence", 
-                    "article_selector": "article, .c-entry-box",
-                    "title_selector": "h2 a, h3 a, .c-entry-box--compact__title a",
-                    "content_selector": "p, .c-entry-summary"
+                    "name": "Analytics Insight AI",
+                    "url": "https://www.analyticsinsight.net/artificial-intelligence/",
+                    "article_selector": "article, .post",
+                    "title_selector": "h2 a, h3 a, .title a",
+                    "content_selector": ".excerpt, .summary, p"
                 }
             ],
             "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             "headers": {
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-                "Accept-Language": "en-US,en;q=0.9",
-                "Accept-Encoding": "gzip, deflate, br",
-                "DNT": "1",
-                "Connection": "keep-alive",
-                "Upgrade-Insecure-Requests": "1",
-                "Sec-Fetch-Dest": "document",
-                "Sec-Fetch-Mode": "navigate",
-                "Sec-Fetch-Site": "none",
-                "Cache-Control": "max-age=0"
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.9"
             },
             "timeout": 30,
             "delay_between_requests": 1.0,  # Increased delay to avoid rate limiting
             "max_articles_per_site": 100,  # Максимум статей с одного сайта
             "max_retries": 3,  # Number of retries for failed requests
-            "backoff_factor": 2  # Exponential backoff multiplier
+            "backoff_factor": 2,  # Exponential backoff multiplier
+            "max_article_age_days": 7  # Only accept articles newer than 7 days
         },
         
         # RSS feeds - Verified working sources 2024
@@ -108,6 +94,13 @@ CONFIG = {
             # Removed Unite AI - has XML syntax errors
             {"url": "https://analyticsindiamag.com/feed/", "name": "Analytics India Magazine"}
         ],
+        
+        # RSS scraping settings
+        "rss_settings": {
+            "max_article_age_days": 7,  # Only accept articles newer than 7 days
+            "timeout": 30,
+            "max_retries": 3
+        },
         
         # Reddit scraping - DISABLED due to API authentication requirements since 2023
         "reddit": {
