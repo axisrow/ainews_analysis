@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import time
 from typing import List, Dict, Optional
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin
 import logging
 from datetime import datetime
 import hashlib

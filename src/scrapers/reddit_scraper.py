@@ -1,10 +1,8 @@
 import praw
 import requests
-import json
 from datetime import datetime
 from typing import List, Dict, Optional
 import logging
-import hashlib
 from praw.models import Comment
 
 logger = logging.getLogger(__name__)

@@ -1,11 +1,10 @@
 import re
 import json
 from datetime import datetime, timedelta
-from typing import Optional, Dict, Any
+from typing import Optional
 from bs4 import BeautifulSoup
 import logging
 from dateutil import parser as date_parser
-from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
 

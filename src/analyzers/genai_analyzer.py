@@ -6,7 +6,7 @@ Enhanced analysis using Google's Gemini model - Updated for new SDK
 
 import json
 import time
-from typing import Dict, List, Optional, Any, Union
+from typing import Dict, List, Optional, Any
 from loguru import logger
 from google import genai
 from google.genai import types

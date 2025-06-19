@@ -1,10 +1,8 @@
-from transformers import AutoTokenizer
 from transformers.pipelines import pipeline
 from textblob import TextBlob
 import logging
-from typing import Dict, List, Tuple, Optional, Any
-from typing import Dict, List, Tuple, Optional, Any
-import numpy as np
+from typing import Dict, List
+from typing import Dict, List
 
 logger = logging.getLogger(__name__)
 

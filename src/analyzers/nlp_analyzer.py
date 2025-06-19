@@ -5,7 +5,6 @@ from collections import Counter
 import logging
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import LatentDirichletAllocation, NMF
-import numpy as np
 
 logger = logging.getLogger(__name__)
 

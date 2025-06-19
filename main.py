@@ -4,7 +4,6 @@ AI News Research Project
 Main entry point for collecting and analyzing AI news
 """
 
-import logging
 from loguru import logger
 import argparse
 from datetime import datetime
@@ -232,7 +231,7 @@ def test_genai_analysis(test_articles: list, genai_analyzer) -> dict:
     
     with tqdm(total=len(test_articles), desc="Testing GenAI", unit="article") as pbar:
         for i, article in enumerate(test_articles):
-            start_time = time.time()
+            time.time()
             
             try:
                 analyzed_article = genai_analyzer.analyze_article(article.copy())

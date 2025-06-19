@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
@@ -13,8 +12,6 @@ sys.path.append(str(Path(__file__).parent.parent.parent))
 sys.path.append(str(Path(__file__).parent.parent))
 
 from models.database import Database
-from analyzers.nlp_analyzer import NLPAnalyzer
-from analyzers.sentiment_analyzer import SentimentAnalyzer
 
 
 def run_dashboard(config: dict):
