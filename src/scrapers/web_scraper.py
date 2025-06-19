@@ -208,7 +208,9 @@ class WebScraper:
                     return content.get_text(separator='\n', strip=True)
                     
             # Fallback to body
-            return soup.body.get_text(separator='\n', strip=True)
+            if soup.body:
+                return soup.body.get_text(separator='\n', strip=True)
+            return None
             
         except Exception as e:
             logger.error(f"Error fetching article content from {url}: {str(e)}")

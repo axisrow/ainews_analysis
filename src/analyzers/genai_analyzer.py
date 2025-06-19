@@ -124,6 +124,10 @@ Summary: {summary}
     
     def _get_genai_analysis_structured(self, content: str) -> Optional[Dict[str, Any]]:
         """Get structured analysis from Google Gemini using new SDK"""
+        if self.client is None:
+            logger.error("GenAI client is unexpectedly None in _get_genai_analysis_structured.")
+            return None
+        
         system_instruction = """
 You are an expert AI news analyst. Analyze AI news articles and provide structured insights focusing on:
 1. Technical significance and innovation level

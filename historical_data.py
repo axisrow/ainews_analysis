@@ -18,9 +18,9 @@ sys.path.append(str(Path(__file__).parent / 'src'))
 # Import configuration
 from config import get_config
 
-from models.database import Database
-from analyzers.nlp_analyzer import NLPAnalyzer
-from analyzers.sentiment_analyzer import SentimentAnalyzer
+from src.models.database import Database
+from src.analyzers.nlp_analyzer import NLPAnalyzer
+from src.analyzers.sentiment_analyzer import SentimentAnalyzer
 
 
 def setup_logging():

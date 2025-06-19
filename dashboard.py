@@ -11,7 +11,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent / 'src'))
 
 from config import get_config
-from visualization.dashboard import run_dashboard
+from src.visualization.dashboard import run_dashboard
 
 
 def main():

@@ -1,6 +1,6 @@
 import feedparser
 from datetime import datetime
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 import logging
 import hashlib
 from urllib.parse import urlparse
@@ -53,7 +53,7 @@ class RSSFeedScraper:
             
         return articles
     
-    def _extract_article_from_entry(self, entry: Dict, source_name: str) -> Optional[Dict]:
+    def _extract_article_from_entry(self, entry: Any, source_name: str) -> Optional[Dict]:
         """Extract article information from RSS entry"""
         try:
             article = {
@@ -128,17 +128,18 @@ class RSSFeedScraper:
         try:
             feed = feedparser.parse(feed_url)
             
+            feed_metadata: Any = feed.feed
             info = {
-                'title': feed.feed.get('title', 'Unknown'),
-                'description': feed.feed.get('description', ''),
-                'link': feed.feed.get('link', ''),
-                'language': feed.feed.get('language', ''),
+                'title': feed_metadata.get('title', 'Unknown'),
+                'description': feed_metadata.get('description', ''),
+                'link': feed_metadata.get('link', ''),
+                'language': feed_metadata.get('language', ''),
                 'entries_count': len(feed.entries),
                 'last_updated': None
             }
             
-            if hasattr(feed.feed, 'updated_parsed'):
-                info['last_updated'] = datetime(*feed.feed.updated_parsed[:6]).isoformat()
+            if hasattr(feed_metadata, 'updated_parsed'):
+                info['last_updated'] = datetime(*feed_metadata.updated_parsed[:6]).isoformat()
             
             return info
             

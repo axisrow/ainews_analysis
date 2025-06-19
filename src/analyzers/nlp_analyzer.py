@@ -158,11 +158,14 @@ class NLPAnalyzer:
             'corpus_size': len(articles)
         }
     
-    def _perform_topic_modeling(self, corpus: List[str], num_topics: int = None) -> List[Dict]:
+    def _perform_topic_modeling(self, corpus: List[str], num_topics: Optional[int] = None) -> List[Dict]:
         """Perform topic modeling on corpus"""
         if num_topics is None:
             num_topics = self.config.get('topics', {}).get('num_topics', 10)
             
+        # Ensure num_topics is an integer before use
+        num_topics_int = int(num_topics) if num_topics is not None else 10 # Fallback in case config returns None unexpectedly
+        
         try:
             # Vectorize documents
             doc_term_matrix = self.vectorizer.fit_transform(corpus)
@@ -175,11 +178,11 @@ class NLPAnalyzer:
             
             if method == 'lda':
                 model = LatentDirichletAllocation(
-                    n_components=num_topics,
+                    n_components=num_topics_int,
                     random_state=42
                 )
             else:  # NMF
-                model = NMF(n_components=num_topics, random_state=42)
+                model = NMF(n_components=num_topics_int, random_state=42)
                 
             model.fit(doc_term_matrix)
             

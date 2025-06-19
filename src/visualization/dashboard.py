@@ -76,8 +76,8 @@ def run_dashboard(config: dict):
     # Get filtered articles
     articles = db.get_articles(
         limit=1000,
-        start_date=date_range[0] if len(date_range) > 0 else None,
-        end_date=date_range[1] if len(date_range) > 1 else None,
+        start_date=datetime.combine(date_range[0], datetime.min.time()) if len(date_range) > 0 else None,
+        end_date=datetime.combine(date_range[1], datetime.max.time()) if len(date_range) > 1 else None,
         sentiment=sentiment_filter.lower() if sentiment_filter != "All" else None
     )
     

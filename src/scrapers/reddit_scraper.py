@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import List, Dict, Optional
 import logging
 import hashlib
+from praw.models import Comment
 
 logger = logging.getLogger(__name__)
 
@@ -38,31 +39,23 @@ class RedditScraper:
             article = {
                 'source': f"Reddit - r/{subreddit_name}",
                 'source_type': 'reddit',
-                'scraped_at': datetime.now().isoformat()
+                'scraped_at': datetime.now().isoformat(),
+                'id': post.id,
+                'title': post.title,
+                'url': f"https://reddit.com{post.permalink}",
+                'reddit_url': post.url,  # External URL if link post
+                'summary': post.selftext[:500] if post.selftext else '',
+                'author': str(post.author) if post.author else '[deleted]',
+                'published_date': datetime.fromtimestamp(post.created_utc).isoformat(),
+                'score': post.score,
+                'upvote_ratio': post.upvote_ratio,
+                'num_comments': post.num_comments,
+                'post_type': 'text' if post.is_self else 'link',
+                'tags': [] # Initialize tags as an empty list
             }
             
-            # Basic post information
-            article['id'] = post.id
-            article['title'] = post.title
-            article['url'] = f"https://reddit.com{post.permalink}"
-            article['reddit_url'] = post.url  # External URL if link post
-            
-            # Post content
-            article['summary'] = post.selftext[:500] if post.selftext else ''
-            
-            # Metadata
-            article['author'] = str(post.author) if post.author else '[deleted]'
-            article['published_date'] = datetime.fromtimestamp(post.created_utc).isoformat()
-            article['score'] = post.score
-            article['upvote_ratio'] = post.upvote_ratio
-            article['num_comments'] = post.num_comments
-            
-            # Post type
-            article['post_type'] = 'text' if post.is_self else 'link'
-            
-            # Flair/tags
             if post.link_flair_text:
-                article['tags'] = [post.link_flair_text]
+                article['tags'].append(post.link_flair_text)
             
             return article
             
@@ -94,6 +87,10 @@ class RedditScraper:
         """Search across all of Reddit for AI-related posts"""
         articles = []
         
+        if not self.reddit:
+            logger.warning("Reddit instance not initialized. Cannot search Reddit.")
+            return []
+
         try:
             logger.info(f"Searching Reddit for: {query}")
             
@@ -112,12 +109,17 @@ class RedditScraper:
         """Get top comments from a Reddit post"""
         comments = []
         
+        if not self.reddit:
+            logger.warning(f"Reddit instance not initialized. Cannot get comments for post {post_id}.")
+            return []
+
         try:
             submission = self.reddit.submission(id=post_id)
             submission.comments.replace_more(limit=0)
             
             for comment in submission.comments.list()[:limit]:
-                if hasattr(comment, 'body'):
+                # Ensure the comment is a Comment object and not MoreComments
+                if isinstance(comment, Comment) and hasattr(comment, 'body'):
                     comments.append({
                         'id': comment.id,
                         'author': str(comment.author) if comment.author else '[deleted]',

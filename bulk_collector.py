@@ -17,13 +17,13 @@ sys.path.append(str(Path(__file__).parent / 'src'))
 # Import configuration
 from config import get_config, set_bulk_mode
 
-from scrapers.web_scraper import WebScraper
-from scrapers.rss_scraper import RSSFeedScraper
-from scrapers.reddit_scraper import RedditScraper
-from analyzers.nlp_analyzer import NLPAnalyzer
-from analyzers.sentiment_analyzer import SentimentAnalyzer
-from analyzers.genai_analyzer import GenAIAnalyzer
-from models.database import Database
+from src.scrapers.web_scraper import WebScraper
+from src.scrapers.rss_scraper import RSSFeedScraper
+from src.scrapers.reddit_scraper import RedditScraper
+from src.analyzers.nlp_analyzer import NLPAnalyzer
+from src.analyzers.sentiment_analyzer import SentimentAnalyzer
+from src.analyzers.genai_analyzer import GenAIAnalyzer
+from src.models.database import Database
 
 
 def setup_logging():

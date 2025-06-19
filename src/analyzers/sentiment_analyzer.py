@@ -1,7 +1,9 @@
-from transformers import pipeline, AutoTokenizer
+from transformers import AutoTokenizer
+from transformers.pipelines import pipeline
 from textblob import TextBlob
 import logging
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple, Optional, Any
+from typing import Dict, List, Tuple, Optional, Any
 import numpy as np
 
 logger = logging.getLogger(__name__)
@@ -51,7 +53,12 @@ class SentimentAnalyzer:
             if len(text) > max_length:
                 text = text[:max_length]
             
-            results = self.transformer_analyzer(text)[0]
+            raw_results = self.transformer_analyzer(text)
+            if isinstance(raw_results, list) and raw_results:
+                results = raw_results[0]
+            else:
+                logger.error(f"Transformer sentiment analysis returned unexpected result: {raw_results}. Falling back to TextBlob.")
+                return self._textblob_sentiment(text)
             
             # Map labels to standard format
             label_map = {
@@ -80,8 +87,9 @@ class SentimentAnalyzer:
         """Use TextBlob for sentiment analysis"""
         try:
             blob = TextBlob(text)
-            polarity = blob.sentiment.polarity
-            subjectivity = blob.sentiment.subjectivity
+            sentiment_obj = blob.sentiment
+            polarity = sentiment_obj.polarity  # type: ignore
+            subjectivity = sentiment_obj.subjectivity  # type: ignore
             
             # Convert polarity to sentiment label
             if polarity > 0.1:
