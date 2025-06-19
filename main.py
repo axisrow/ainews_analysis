@@ -11,6 +11,7 @@ from datetime import datetime
 import sys
 from pathlib import Path
 import yaml
+from typing import Optional
 
 # Add src to Python path
 sys.path.append(str(Path(__file__).parent / 'src'))
@@ -18,13 +19,13 @@ sys.path.append(str(Path(__file__).parent / 'src'))
 # Import configuration
 from config import get_config, set_test_mode, set_bulk_mode
 
-from scrapers.web_scraper import WebScraper
-from scrapers.rss_scraper import RSSFeedScraper
-from scrapers.reddit_scraper import RedditScraper
-from analyzers.nlp_analyzer import NLPAnalyzer
-from analyzers.sentiment_analyzer import SentimentAnalyzer
-from analyzers.genai_analyzer import GenAIAnalyzer
-from models.database import Database
+from src.scrapers.web_scraper import WebScraper
+from src.scrapers.rss_scraper import RSSFeedScraper
+from src.scrapers.reddit_scraper import RedditScraper
+from src.analyzers.nlp_analyzer import NLPAnalyzer
+from src.analyzers.sentiment_analyzer import SentimentAnalyzer
+from src.analyzers.genai_analyzer import GenAIAnalyzer
+from src.models.database import Database
 
 
 def setup_logging(config: dict):
@@ -42,7 +43,7 @@ def setup_logging(config: dict):
     )
     
     # Add file logger
-    log_file = log_config.get('file', 'logs/ai_news_research.log')
+    log_file = str(log_config.get('file', 'logs/ai_news_research.log'))
     Path(log_file).parent.mkdir(exist_ok=True)
     
     logger.add(
@@ -53,7 +54,7 @@ def setup_logging(config: dict):
     )
 
 
-def load_config(config_path: str = None) -> dict:
+def load_config(config_path: Optional[str] = None) -> dict:
     """Load configuration from Python config module"""
     return get_config()
 
