@@ -207,6 +207,35 @@ def show_overview(articles, db):
         fig = px.line(timeline_data, x='Date', y='Count',
                      title="Articles Published Over Time")
         st.plotly_chart(fig, use_container_width=True)
+    
+    # Analysis Method Statistics
+    st.subheader("Analysis Coverage")
+    col1, col2, col3 = st.columns(3)
+    
+    sentiment_stats = prepare_sentiment_method_stats(articles)
+    genai_articles = len([a for a in articles if a.get('genai_analysis')])
+    nlp_articles = len([a for a in articles if a.get('themes') or a.get('entities')])
+    
+    with col1:
+        st.metric(
+            "😊 Sentiment Analysis",
+            sentiment_stats.get('transformer', 0) + sentiment_stats.get('textblob', 0),
+            delta=f"T:{sentiment_stats.get('transformer', 0)} B:{sentiment_stats.get('textblob', 0)}"
+        )
+    
+    with col2:
+        st.metric(
+            "🤖 GenAI Analysis",
+            genai_articles,
+            delta=f"{genai_articles/len(articles)*100:.1f}% coverage" if articles else "0% coverage"
+        )
+    
+    with col3:
+        st.metric(
+            "🏷️ NLP Analysis",
+            nlp_articles,
+            delta=f"{nlp_articles/len(articles)*100:.1f}% coverage" if articles else "0% coverage"
+        )
 
 
 def show_sentiment_analysis(articles):
@@ -268,6 +297,70 @@ def show_sentiment_analysis(articles):
         )
         fig.add_hline(y=0, line_dash="dash", line_color="gray")
         st.plotly_chart(fig, use_container_width=True)
+    
+    # Aspect-based sentiment analysis
+    st.subheader("Aspect-Based Sentiment Analysis")
+    aspect_sentiment_data = prepare_aspect_sentiment_data(articles)
+    
+    if aspect_sentiment_data:
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # Aspect sentiment distribution
+            aspect_df = pd.DataFrame([
+                {'Aspect': aspect, 'Sentiment': sentiment, 'Score': data['confidence']}
+                for aspect, sentiments in aspect_sentiment_data.items()
+                for sentiment, data in sentiments.items()
+                if data['count'] > 0
+            ])
+            
+            if not aspect_df.empty:
+                fig = px.bar(
+                    aspect_df,
+                    x='Aspect',
+                    y='Score',
+                    color='Sentiment',
+                    title="Sentiment by AI Aspects",
+                    color_discrete_map={
+                        'positive': '#2E7D32',
+                        'negative': '#C62828',
+                        'neutral': '#757575'
+                    }
+                )
+                fig.update_layout(xaxis_tickangle=45)
+                st.plotly_chart(fig, use_container_width=True)
+        
+        with col2:
+            # Aspect coverage
+            aspect_coverage = {aspect: sum(s['count'] for s in sentiments.values()) 
+                             for aspect, sentiments in aspect_sentiment_data.items()}
+            
+            if aspect_coverage:
+                coverage_df = pd.DataFrame(
+                    list(aspect_coverage.items()),
+                    columns=['Aspect', 'Mentions']
+                ).sort_values('Mentions', ascending=False)
+                
+                fig = px.pie(
+                    coverage_df,
+                    values='Mentions',
+                    names='Aspect',
+                    title="AI Aspect Coverage Distribution"
+                )
+                st.plotly_chart(fig, use_container_width=True)
+    
+    # Sentiment analysis method breakdown
+    st.subheader("Sentiment Analysis Methods")
+    method_stats = prepare_sentiment_method_stats(articles)
+    
+    if method_stats:
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("🤖 Transformer", method_stats.get('transformer', 0))
+        with col2:
+            st.metric("📝 TextBlob", method_stats.get('textblob', 0))
+        with col3:
+            st.metric("❓ Unknown", method_stats.get('unknown', 0))
 
 
 def show_topics_entities(articles):
@@ -315,6 +408,78 @@ def show_topics_entities(articles):
                 title="Top AI Themes"
             )
             st.plotly_chart(fig, use_container_width=True)
+    
+    # Topic Modeling Results
+    st.subheader("Topic Modeling Results")
+    topic_modeling_data = prepare_topic_modeling_data(articles)
+    
+    if topic_modeling_data:
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # Display discovered topics
+            st.markdown("**Discovered Topics:**")
+            for i, topic in enumerate(topic_modeling_data[:5]):  # Show top 5 topics
+                st.write(f"**Topic {i+1}:** {', '.join(topic.get('words', []))}")
+                if topic.get('weight'):
+                    st.progress(min(topic['weight'], 1.0))
+        
+        with col2:
+            # Topic weights visualization
+            if len(topic_modeling_data) > 1:
+                topic_df = pd.DataFrame([
+                    {'Topic': f"Topic {t['topic_id']+1}", 'Weight': t.get('weight', 0)}
+                    for t in topic_modeling_data
+                ])
+                
+                fig = px.bar(
+                    topic_df,
+                    x='Topic',
+                    y='Weight',
+                    title="Topic Model Weights"
+                )
+                st.plotly_chart(fig, use_container_width=True)
+    
+    # Key Phrases Analysis
+    st.subheader("Key Phrases Analysis")
+    key_phrases_data = prepare_key_phrases_data(articles)
+    
+    if key_phrases_data:
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # Top key phrases
+            phrases_df = pd.DataFrame(
+                list(key_phrases_data.items()),
+                columns=['Phrase', 'Frequency']
+            ).sort_values('Frequency', ascending=False).head(15)
+            
+            fig = px.bar(
+                phrases_df,
+                x='Frequency',
+                y='Phrase',
+                orientation='h',
+                title="Most Common Key Phrases"
+            )
+            st.plotly_chart(fig, use_container_width=True)
+        
+        with col2:
+            # Key phrases word cloud
+            if key_phrases_data:
+                phrases_text = ' '.join([phrase for phrase in key_phrases_data.keys()])
+                
+                wordcloud = WordCloud(
+                    width=400,
+                    height=300,
+                    background_color='white',
+                    colormap='plasma'
+                ).generate(phrases_text)
+                
+                fig, ax = plt.subplots(figsize=(8, 6))
+                ax.imshow(wordcloud, interpolation='bilinear')
+                ax.axis('off')
+                ax.set_title("Key Phrases Word Cloud")
+                st.pyplot(fig)
     
     # Top entities
     st.subheader("Top Entities")
@@ -807,6 +972,111 @@ def prepare_reddit_engagement_data(reddit_articles):
         df['Published Date'] = pd.to_datetime(df['Published Date'])
         return df
     return pd.DataFrame()
+
+
+def prepare_aspect_sentiment_data(articles):
+    """Prepare aspect-based sentiment analysis data"""
+    aspect_data = {}
+    
+    for article in articles:
+        sentiment_aspects = article.get('sentiment_aspects', {})
+        
+        if sentiment_aspects and isinstance(sentiment_aspects, dict):
+            for aspect, aspect_sentiment in sentiment_aspects.items():
+                if aspect not in aspect_data:
+                    aspect_data[aspect] = {
+                        'positive': {'count': 0, 'confidence': 0},
+                        'negative': {'count': 0, 'confidence': 0},
+                        'neutral': {'count': 0, 'confidence': 0}
+                    }
+                
+                if isinstance(aspect_sentiment, dict):
+                    sentiment = aspect_sentiment.get('sentiment', 'neutral')
+                    confidence = aspect_sentiment.get('confidence', 0)
+                    
+                    if sentiment in aspect_data[aspect]:
+                        aspect_data[aspect][sentiment]['count'] += 1
+                        aspect_data[aspect][sentiment]['confidence'] += confidence
+    
+    # Calculate average confidence
+    for aspect in aspect_data:
+        for sentiment in aspect_data[aspect]:
+            count = aspect_data[aspect][sentiment]['count']
+            if count > 0:
+                aspect_data[aspect][sentiment]['confidence'] /= count
+    
+    return aspect_data
+
+
+def prepare_sentiment_method_stats(articles):
+    """Prepare sentiment analysis method statistics"""
+    stats = {'transformer': 0, 'textblob': 0, 'unknown': 0}
+    
+    for article in articles:
+        sentiment_data = article.get('sentiment', {})
+        if isinstance(sentiment_data, dict):
+            method = sentiment_data.get('method', 'unknown')
+            if method in stats:
+                stats[method] += 1
+            else:
+                stats['unknown'] += 1
+    
+    return stats
+
+
+def prepare_topic_modeling_data(articles):
+    """Prepare topic modeling data from corpus analysis"""
+    # Look for topic modeling results in the first article that has them
+    # (since topic modeling is typically done on the entire corpus)
+    
+    for article in articles:
+        if 'topics' in article:
+            topics = article['topics']
+            if isinstance(topics, list) and topics:
+                return topics
+    
+    # If no stored topic results, try to extract from themes
+    # This is a simplified fallback
+    all_themes = []
+    for article in articles:
+        themes = article.get('themes', [])
+        if isinstance(themes, list):
+            all_themes.extend(themes)
+    
+    if all_themes:
+        from collections import Counter
+        theme_counts = Counter(all_themes)
+        
+        # Convert to topic-like structure
+        topics = []
+        for i, (theme, count) in enumerate(theme_counts.most_common(10)):
+            topics.append({
+                'topic_id': i,
+                'words': theme.split()[:5],  # Split theme into words
+                'weight': count / len(articles)  # Normalize by article count
+            })
+        
+        return topics
+    
+    return []
+
+
+def prepare_key_phrases_data(articles):
+    """Prepare key phrases data"""
+    phrase_counts = {}
+    
+    for article in articles:
+        key_phrases = article.get('key_phrases', [])
+        if isinstance(key_phrases, list):
+            for phrase in key_phrases:
+                if isinstance(phrase, str) and len(phrase.strip()) > 2:
+                    phrase_counts[phrase] = phrase_counts.get(phrase, 0) + 1
+    
+    # Filter out phrases that appear only once
+    filtered_phrases = {phrase: count for phrase, count in phrase_counts.items() 
+                       if count > 1}
+    
+    return filtered_phrases
 
 
 if __name__ == "__main__":
