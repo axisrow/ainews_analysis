@@ -51,11 +51,14 @@ RUN useradd --create-home --shell /bin/bash app
 USER app
 WORKDIR /home/app
 
+# Create necessary directories
+RUN mkdir -p data logs reports
+
 # Copy application code
 COPY --chown=app:app . .
 
-# Create necessary directories
-RUN mkdir -p data logs reports
+# Copy database file if it exists
+COPY --chown=app:app data/ai_news.db data/ai_news.db
 
 # Set Python path
 ENV PYTHONPATH="/home/app:/home/app/src"

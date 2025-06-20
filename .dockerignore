@@ -37,12 +37,11 @@ ENV/
 Thumbs.db
 
 # Project specific
-data/
+data/keywords.json
 logs/
 reports/
-*.db
-*.sqlite
-*.sqlite3
+# Allow database file to be copied
+!data/ai_news.db
 
 # Environment variables
 .env.local
