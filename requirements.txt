@@ -3,7 +3,6 @@ requests
 beautifulsoup4
 newspaper3k
 feedparser
-selenium
 
 # NLP and text analysis
 spacy
@@ -17,7 +16,6 @@ google-genai[aiohttp]
 # Data processing and analysis
 pandas
 numpy
-scipy
 
 # Database
 sqlalchemy
@@ -28,9 +26,6 @@ seaborn
 plotly
 streamlit
 wordcloud
-
-# Reddit scraping
-praw
 
 # Utilities
 python-dotenv
@@ -44,5 +39,3 @@ pytest
 black
 flake8
 mypy
-jupyter
-ipykernel

@@ -156,7 +156,7 @@ class RSSFeedScraper:
             }
             
             if hasattr(feed_metadata, 'updated_parsed'):
-                info['last_updated'] = datetime(*feed_metadata.updated_parsed[:6]).isoformat()
+                info['last_updated'] = datetime(*feed_metadata.updated_parsed[:6])
             
             return info
             
@@ -167,33 +167,12 @@ class RSSFeedScraper:
     def _validate_feed(self, feed_url: str) -> bool:
         """Validate RSS feed URL and basic accessibility"""
         try:
-            import requests
-            
             # Basic URL validation
             parsed = urlparse(feed_url)
             if not parsed.scheme or not parsed.netloc:
                 return False
             
-            # Try to fetch the feed with a quick HEAD request
-            headers = {
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-            }
-            response = requests.head(feed_url, timeout=15, allow_redirects=True, headers=headers)
-            
-            # Check if response is successful
-            if response.status_code != 200:
-                logger.debug(f"RSS feed returned status {response.status_code}: {feed_url}")
-                return False
-            
-            # Check content type (should be XML-related)
-            content_type = response.headers.get('content-type', '').lower()
-            valid_types = ['application/rss+xml', 'application/xml', 'text/xml', 
-                          'application/atom+xml', 'text/rss+xml']
-            
-            if not any(valid_type in content_type for valid_type in valid_types):
-                # Some feeds don't set proper content-type, so this is just a warning
-                logger.debug(f"Unexpected content-type for RSS feed {feed_url}: {content_type}")
-            
+            # Skip expensive HEAD request, just validate URL structure
             return True
             
         except Exception as e:

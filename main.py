@@ -20,10 +20,10 @@ from config import get_config, set_test_mode, set_bulk_mode
 
 from src.scrapers.web_scraper import WebScraper
 from src.scrapers.rss_scraper import RSSFeedScraper
-from src.scrapers.reddit_scraper import RedditScraper
 from src.analyzers.nlp_analyzer import NLPAnalyzer
 from src.analyzers.sentiment_analyzer import SentimentAnalyzer
 from src.analyzers.genai_analyzer import GenAIAnalyzer
+from src.analyzers.keyword_analyzer import KeywordAnalyzer
 from src.models.database import Database
 
 
@@ -110,21 +110,8 @@ def collect_data(config: dict, filter_existing: bool = True) -> list:
     except Exception as e:
         logger.error(f"RSS scraping failed: {str(e)}")
     
-    # Reddit
-    logger.info("Starting Reddit scraping...")
-    try:
-        reddit_scraper = RedditScraper(data_config['reddit'])
-        reddit_articles = reddit_scraper.scrape_all_subreddits()
-        # Filter out existing articles
-        if filter_existing:
-            new_reddit_articles = [a for a in reddit_articles if a.get('url') not in existing_urls]
-            logger.info(f"Collected {len(reddit_articles)} posts from Reddit ({len(new_reddit_articles)} new)")
-            all_articles.extend(new_reddit_articles)
-        else:
-            all_articles.extend(reddit_articles)
-            logger.info(f"Collected {len(reddit_articles)} posts from Reddit")
-    except Exception as e:
-        logger.error(f"Reddit scraping failed: {str(e)}")
+    # Reddit scraping disabled due to API changes
+    logger.info("Reddit scraping is disabled (API incompatibility)")
     
     if filter_existing:
         logger.info(f"Total articles collected: {len(all_articles)} (new articles only)")
@@ -152,16 +139,17 @@ def analyze_articles(articles: list, config: dict, test_genai: int = 0, test_mod
     genai_analyzer = GenAIAnalyzer(config['nlp'])
     db = Database(config['database'])
     
-    # Check if GenAI is enabled
-    genai_enabled = config['nlp'].get('genai', {}).get('enabled', False)
+    # Check if GenAI API key is available
+    genai_config = config['nlp'].get('genai', {})
+    has_api_key = bool(genai_config.get('api_key', '').strip())
     
-    # GenAI testing mode
-    if test_genai > 0 and genai_enabled:
+    # GenAI testing mode (only if API key is available)
+    if test_genai > 0 and has_api_key:
         test_count = min(test_genai, len(articles))
         test_results = test_genai_analysis(articles[:test_count], genai_analyzer)
         if not confirm_full_analysis(test_results):
             logger.info("Full GenAI analysis cancelled by user")
-            genai_enabled = False
+            has_api_key = False  # Disable API usage but allow fallback
     
     # Analyze articles with progress bar and save each one
     analyzed_articles = []
@@ -176,9 +164,8 @@ def analyze_articles(articles: list, config: dict, test_genai: int = 0, test_mod
                 # Sentiment analysis
                 article = sentiment_analyzer.analyze_article_sentiment(article)
                 
-                # GenAI analysis (if enabled and confirmed)
-                if genai_enabled:
-                    article = genai_analyzer.analyze_article(article)
+                # GenAI analysis (always attempt - fallback if no API key)
+                article = genai_analyzer.analyze_article(article)
                 
                 # Save article immediately after analysis
                 try:
@@ -205,6 +192,14 @@ def analyze_articles(articles: list, config: dict, test_genai: int = 0, test_mod
                 analyzed_articles.append(article)  # Add even failed articles
                 pbar.update(1)
                 pbar.set_postfix_str(f"Error on article {i+1}")
+    
+    # Log GenAI analysis statistics
+    genai_stats = genai_analyzer.get_analysis_stats()
+    if genai_stats['total'] > 0:
+        if genai_stats['api_count'] > 0:
+            logger.info(f"🤖 GenAI analysis: {genai_stats['api_count']} via API, {genai_stats['fallback_count']} via fallback")
+        else:
+            logger.info(f"📝 GenAI analysis: {genai_stats['fallback_count']} articles processed via fallback (no API key)")
     
     logger.info(f"Article analysis completed: {saved_count}/{len(articles)} articles saved to database")
     return analyzed_articles
@@ -372,6 +367,49 @@ def generate_report(config: dict):
     print("="*50)
 
 
+def analyze_keywords(config: dict, days_back: Optional[int] = None):
+    """Analyze and export keywords from articles in database"""
+    logger.info("Starting keyword analysis...")
+    
+    db = Database(config['database'])
+    keyword_analyzer = KeywordAnalyzer(config)
+    
+    # Analyze keywords
+    results = keyword_analyzer.analyze_keywords_from_database(
+        database=db,
+        min_frequency=3,
+        top_n=200,
+        days_back=days_back
+    )
+    
+    if results['status'] == 'success':
+        # Save keywords
+        output_path = keyword_analyzer.save_keywords(results)
+        
+        # Print summary
+        print("\n" + "="*50)
+        print("KEYWORD ANALYSIS RESULTS")
+        print("="*50)
+        print(f"Total articles analyzed: {results['statistics']['total_articles']}")
+        print(f"Total unique terms: {results['statistics']['total_unique_terms']}")
+        if results['statistics']['date_range']:
+            print(f"Date range: {results['statistics']['date_range']['earliest']} to {results['statistics']['date_range']['latest']}")
+        print(f"\nTop 20 Keywords:")
+        for i, kw in enumerate(results['keywords'][:20], 1):
+            sources = ', '.join(kw['sources'])
+            ai_marker = " 🤖" if kw['is_ai_term'] else ""
+            print(f"  {i:2d}. {kw['keyword']:<30} (score: {kw['score']:.3f}, freq: {kw['frequency']}, sources: {sources}){ai_marker}")
+        
+        print(f"\nKeywords saved to:")
+        print(f"  - {output_path} (YAML format for editing)")
+        print(f"  - {Path(output_path).with_suffix('.json')} (JSON format)")
+        print(f"  - {Path(output_path).with_suffix('.txt')} (Simple text list)")
+        print("\nEdit the files as needed to customize your keyword list.")
+        print("="*50)
+    else:
+        logger.error(f"Keyword analysis failed: {results.get('message', 'Unknown error')}")
+
+
 def main():
     """Main entry point"""
     parser = argparse.ArgumentParser(description='AI News Research Project')
@@ -426,6 +464,17 @@ def main():
         '--reanalyze',
         action='store_true',
         help='Reanalyze all articles including previously analyzed ones'
+    )
+    parser.add_argument(
+        '--keywords',
+        action='store_true',
+        help='Analyze articles to extract and export keywords'
+    )
+    parser.add_argument(
+        '--keywords-days',
+        type=int,
+        default=None,
+        help='Analyze keywords from last N days only (default: all articles)'
     )
     
     args = parser.parse_args()
@@ -505,13 +554,17 @@ def main():
             
             try:
                 # Launch Streamlit dashboard
-                result = subprocess.run([
+                subprocess.run([
                     sys.executable, '-m', 'streamlit', 'run', 'dashboard.py',
                     '--server.headless', 'false'
-                ], check=True)
+                ])
             except subprocess.CalledProcessError as e:
                 logger.error(f"Failed to launch dashboard: {e}")
                 logger.info("You can manually run: streamlit run dashboard.py")
+        
+        elif args.keywords:
+            # Analyze and export keywords
+            analyze_keywords(config, days_back=args.keywords_days)
             
         else:
             # Default: collect, analyze, and generate report

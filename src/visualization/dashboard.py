@@ -11,7 +11,8 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 sys.path.append(str(Path(__file__).parent.parent))
 
-from models.database import Database
+from src.models.database import Database
+from src.analyzers.keyword_analyzer import KeywordAnalyzer
 
 
 def run_dashboard(config: dict):
@@ -132,9 +133,9 @@ def run_dashboard(config: dict):
         st.metric("Today's Articles", today_articles)
     
     # Tabs
-    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
+    tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(
         ["📊 Overview", "😊 Sentiment Analysis", "🏷️ Topics & Entities", 
-         "📈 Trends", "🤖 GenAI Insights", "📰 Articles"]
+         "📈 Trends", "🤖 GenAI Insights", "📰 Articles", "🔑 Keywords"]
     )
     
     with tab1:
@@ -154,6 +155,9 @@ def run_dashboard(config: dict):
     
     with tab6:
         show_articles(articles_with_dates)
+    
+    with tab7:
+        show_keywords_editor(config)
 
 
 def calculate_average_sentiment(articles):
@@ -1077,6 +1081,256 @@ def prepare_key_phrases_data(articles):
                        if count > 1}
     
     return filtered_phrases
+
+
+def show_keywords_editor(config: dict):
+    """Show keywords editor tab"""
+    st.subheader("🔑 Keywords Editor")
+    
+    # Initialize keyword analyzer
+    keyword_analyzer = KeywordAnalyzer(config)
+    
+    # Create two columns for layout
+    col1, col2 = st.columns([2, 1])
+    
+    with col2:
+        st.subheader("Actions")
+        
+        # Analyze button
+        if st.button("🔍 Analyze Keywords", help="Extract keywords from database"):
+            with st.spinner("Analyzing keywords from database..."):
+                try:
+                    db = Database(config['database'])
+                    results = keyword_analyzer.analyze_keywords_from_database(
+                        database=db,
+                        min_frequency=3,
+                        top_n=200
+                    )
+                    
+                    if results['status'] == 'success':
+                        # Save keywords
+                        output_path = keyword_analyzer.save_keywords(results)
+                        st.success(f"✅ Keywords analyzed and saved! Found {len(results['keywords'])} keywords.")
+                        st.rerun()  # Refresh the page
+                    else:
+                        st.error(f"❌ Analysis failed: {results.get('message', 'Unknown error')}")
+                        
+                except Exception as e:
+                    st.error(f"❌ Error during analysis: {str(e)}")
+        
+        # Load keywords button
+        if st.button("📂 Reload Keywords", help="Reload keywords from file"):
+            st.rerun()  # Just refresh the page
+        
+        st.markdown("---")
+        
+        # Statistics
+        st.subheader("📊 Statistics")
+        try:
+            keywords_data = keyword_analyzer.load_keywords()
+            if keywords_data.get('keywords'):
+                total_keywords = len(keywords_data['keywords'])
+                ai_keywords = len([k for k in keywords_data['keywords'] if k.get('is_ai_term')])
+                
+                st.metric("Total Keywords", total_keywords)
+                st.metric("AI-related", ai_keywords)
+                st.metric("General", total_keywords - ai_keywords)
+                
+                if keywords_data.get('statistics'):
+                    stats = keywords_data['statistics']
+                    st.metric("Articles Analyzed", stats.get('total_articles', 0))
+                    
+                    if stats.get('date_range'):
+                        date_range = stats['date_range']
+                        st.write(f"**Date Range:**")
+                        st.write(f"{date_range.get('earliest', 'N/A')[:10]} to {date_range.get('latest', 'N/A')[:10]}")
+            else:
+                st.info("No keywords loaded. Click 'Analyze Keywords' to generate.")
+                
+        except Exception as e:
+            st.error(f"Error loading statistics: {str(e)}")
+    
+    with col1:
+        st.subheader("Keywords List")
+        
+        try:
+            # Load keywords
+            keywords_data = keyword_analyzer.load_keywords()
+            
+            if not keywords_data.get('keywords'):
+                st.info("🔍 No keywords found. Click 'Analyze Keywords' to generate keywords from your articles database.")
+                return
+            
+            keywords = keywords_data['keywords']
+            
+            # Search and filter controls
+            col_search, col_filter = st.columns([2, 1])
+            
+            with col_search:
+                search_term = st.text_input("🔍 Search keywords", placeholder="Type to search...")
+            
+            with col_filter:
+                filter_type = st.selectbox("Filter", ["All", "AI-related only", "General only"])
+            
+            # Filter keywords based on search and type
+            filtered_keywords = keywords
+            
+            if search_term:
+                filtered_keywords = [k for k in filtered_keywords 
+                                   if search_term.lower() in k['keyword'].lower()]
+            
+            if filter_type == "AI-related only":
+                filtered_keywords = [k for k in filtered_keywords if k.get('is_ai_term')]
+            elif filter_type == "General only":
+                filtered_keywords = [k for k in filtered_keywords if not k.get('is_ai_term')]
+            
+            st.write(f"Showing {len(filtered_keywords)} of {len(keywords)} keywords")
+            
+            # Keywords editor
+            if filtered_keywords:
+                # Show keywords in an editable format
+                st.markdown("**Edit keywords below:** (✏️ = editable, 🗑️ = delete)")
+                
+                # Track changes
+                if 'keywords_changes' not in st.session_state:
+                    st.session_state.keywords_changes = {}
+                if 'keywords_to_delete' not in st.session_state:
+                    st.session_state.keywords_to_delete = set()
+                
+                # Display keywords with edit/delete options
+                for i, keyword in enumerate(filtered_keywords[:50]):  # Limit to 50 for performance
+                    col_kw, col_score, col_ai, col_actions = st.columns([3, 1, 1, 1])
+                    
+                    with col_kw:
+                        key = f"keyword_{i}_{keyword['keyword']}"
+                        new_keyword = st.text_input(
+                            "Keyword",
+                            value=keyword['keyword'],
+                            key=key,
+                            label_visibility="collapsed"
+                        )
+                        
+                        # Track changes
+                        if new_keyword != keyword['keyword']:
+                            st.session_state.keywords_changes[keyword['keyword']] = new_keyword
+                    
+                    with col_score:
+                        st.text(f"Score: {keyword['score']:.3f}")
+                    
+                    with col_ai:
+                        ai_emoji = "🤖" if keyword.get('is_ai_term') else "⚪"
+                        st.text(ai_emoji)
+                    
+                    with col_actions:
+                        delete_key = f"delete_{i}_{keyword['keyword']}"
+                        if st.button("🗑️", key=delete_key, help="Delete keyword"):
+                            st.session_state.keywords_to_delete.add(keyword['keyword'])
+                            st.rerun()
+                
+                # Add new keyword section
+                st.markdown("---")
+                st.subheader("➕ Add New Keyword")
+                
+                col_new_kw, col_new_ai, col_add = st.columns([2, 1, 1])
+                
+                with col_new_kw:
+                    new_keyword = st.text_input("New keyword", placeholder="Enter new keyword...")
+                
+                with col_new_ai:
+                    is_ai_term = st.checkbox("AI-related", key="new_keyword_ai")
+                
+                with col_add:
+                    if st.button("➕ Add") and new_keyword.strip():
+                        # Add new keyword to the list
+                        if 'new_keywords' not in st.session_state:
+                            st.session_state.new_keywords = []
+                        
+                        st.session_state.new_keywords.append({
+                            'keyword': new_keyword.strip().lower(),
+                            'score': 1.0,
+                            'sources': ['manual'],
+                            'frequency': 1,
+                            'is_ai_term': is_ai_term
+                        })
+                        st.success(f"Added: {new_keyword}")
+                        st.rerun()
+                
+                # Save changes section
+                if (st.session_state.get('keywords_changes') or 
+                    st.session_state.get('keywords_to_delete') or 
+                    st.session_state.get('new_keywords')):
+                    
+                    st.markdown("---")
+                    st.subheader("💾 Save Changes")
+                    
+                    # Show pending changes
+                    if st.session_state.get('keywords_changes'):
+                        st.write("**Modified keywords:**")
+                        for old, new in st.session_state.keywords_changes.items():
+                            st.write(f"• {old} → {new}")
+                    
+                    if st.session_state.get('keywords_to_delete'):
+                        st.write("**Keywords to delete:**")
+                        for kw in st.session_state.keywords_to_delete:
+                            st.write(f"• {kw}")
+                    
+                    if st.session_state.get('new_keywords'):
+                        st.write("**New keywords:**")
+                        for kw in st.session_state.new_keywords:
+                            ai_mark = " 🤖" if kw['is_ai_term'] else ""
+                            st.write(f"• {kw['keyword']}{ai_mark}")
+                    
+                    col_save, col_cancel = st.columns(2)
+                    
+                    with col_save:
+                        if st.button("💾 Save All Changes", type="primary"):
+                            try:
+                                # Apply changes to keywords data
+                                updated_keywords = []
+                                
+                                for keyword in keywords:
+                                    # Skip deleted keywords
+                                    if keyword['keyword'] in st.session_state.get('keywords_to_delete', set()):
+                                        continue
+                                    
+                                    # Apply modifications
+                                    if keyword['keyword'] in st.session_state.get('keywords_changes', {}):
+                                        keyword['keyword'] = st.session_state.keywords_changes[keyword['keyword']]
+                                    
+                                    updated_keywords.append(keyword)
+                                
+                                # Add new keywords
+                                if st.session_state.get('new_keywords'):
+                                    updated_keywords.extend(st.session_state.new_keywords)
+                                
+                                # Update keywords data
+                                keywords_data['keywords'] = updated_keywords
+                                
+                                # Save to file
+                                output_path = keyword_analyzer.save_keywords(keywords_data)
+                                
+                                # Clear session state
+                                st.session_state.keywords_changes = {}
+                                st.session_state.keywords_to_delete = set()
+                                st.session_state.new_keywords = []
+                                
+                                st.success(f"✅ Changes saved successfully!")
+                                st.rerun()
+                                
+                            except Exception as e:
+                                st.error(f"❌ Error saving changes: {str(e)}")
+                    
+                    with col_cancel:
+                        if st.button("❌ Cancel Changes"):
+                            # Clear session state
+                            st.session_state.keywords_changes = {}
+                            st.session_state.keywords_to_delete = set()
+                            st.session_state.new_keywords = []
+                            st.rerun()
+            
+        except Exception as e:
+            st.error(f"❌ Error loading keywords: {str(e)}")
+            st.write("Try clicking 'Analyze Keywords' to generate new keywords.")
 
 
 if __name__ == "__main__":

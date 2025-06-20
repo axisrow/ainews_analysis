@@ -1,0 +1,66 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+data/
+logs/
+reports/
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment variables
+.env.local
+.env.production
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Development tools
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.dmypy.json
+dmypy.json

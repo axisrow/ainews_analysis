@@ -27,6 +27,9 @@ class GenAIAnalyzer:
         
         # Initialize the client if API key is available
         self.client = None
+        self.fallback_count = 0
+        self.api_count = 0
+        
         if self.api_key and self.api_key.strip():
             try:
                 self.client = genai.Client(api_key=self.api_key)
@@ -36,7 +39,7 @@ class GenAIAnalyzer:
                 logger.warning(f"⚠️ GenAI initialization failed: {e}")
                 self.client = None
         else:
-            logger.info("🔑 No GenAI API key provided, using fallback analysis")
+            logger.info("🔑 No GOOGLE_API_KEY provided - GenAI analysis will use fallback mode")
     
     def _configure_safety_settings(self):
         """Configure safety settings for content generation"""
@@ -49,6 +52,9 @@ class GenAIAnalyzer:
     def analyze_article(self, article: Dict[str, Any]) -> Dict[str, Any]:
         """Analyze article with Google Gemini using new SDK"""
         if not self.client:
+            self.fallback_count += 1
+            if self.fallback_count == 1:  # Log only once to avoid spam
+                logger.info("📝 Using fallback GenAI analysis (no API key)")
             return self._fallback_analysis(article)
         
         try:
@@ -61,13 +67,22 @@ class GenAIAnalyzer:
             if analysis:
                 # Store AI analysis in JSON field only
                 article['genai_analysis'] = analysis
+                self.api_count += 1
             
             time.sleep(self.delay_between_requests)
             return article
             
         except Exception as e:
-            logger.warning(f"GenAI analysis failed: {e}")
+            logger.warning(f"GenAI API failed, using fallback: {e}")
             return self._fallback_analysis(article)
+    
+    def get_analysis_stats(self) -> Dict[str, int]:
+        """Get statistics about API vs fallback usage"""
+        return {
+            'api_count': self.api_count,
+            'fallback_count': self.fallback_count,
+            'total': self.api_count + self.fallback_count
+        }
     
     def _prepare_content(self, article: Dict[str, Any]) -> str:
         """Prepare article content for AI analysis"""
@@ -195,7 +210,8 @@ Provide detailed analysis covering:
                 end = response_text.rfind('}') + 1
                 json_part = response_text[start:end]
                 return json.loads(json_part)
-        except:
+        except (json.JSONDecodeError, ValueError) as e:
+            logger.debug(f"JSON parsing failed: {e}")
             pass
         
         # Return basic structure if parsing fails
@@ -212,6 +228,8 @@ Provide detailed analysis covering:
     
     def _fallback_analysis(self, article: Dict[str, Any]) -> Dict[str, Any]:
         """Fallback analysis when GenAI is not available"""
+        self.fallback_count += 1
+        
         title = article.get('title', '').lower()
         summary = article.get('summary', '').lower()
         content = f"{title} {summary}"
@@ -376,7 +394,7 @@ Provide detailed analysis covering:
                     else:
                         pbar.set_postfix_str(f"⚠️ {success_count}/{i} successful")
                         
-                except Exception as e:
+                except (ValueError, TypeError, KeyError) as e:
                     logger.warning(f"Failed to analyze article {i}: {e}")
                     analyzed_articles.append(article)
                     pbar.set_postfix_str(f"❌ {success_count}/{i} successful")

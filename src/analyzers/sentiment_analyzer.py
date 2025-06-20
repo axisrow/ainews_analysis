@@ -1,7 +1,6 @@
-from transformers.pipelines import pipeline
+from transformers import pipeline
 from textblob import TextBlob
 import logging
-from typing import Dict, List
 from typing import Dict, List
 
 logger = logging.getLogger(__name__)

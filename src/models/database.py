@@ -9,9 +9,7 @@ from dateutil import parser as date_parser
 import sys
 from pathlib import Path
 
-# Add utils to path
-sys.path.append(str(Path(__file__).parent.parent))
-from utils.url_normalizer import URLNormalizer
+from src.utils.url_normalizer import URLNormalizer
 
 logger = logging.getLogger(__name__)
 

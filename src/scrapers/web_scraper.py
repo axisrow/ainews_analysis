@@ -142,7 +142,7 @@ class WebScraper:
             # Extract publish date using enhanced date extractor
             extracted_date = self.date_extractor.extract_date(article.get('url', ''), element)
             if extracted_date:
-                article['published_date'] = extracted_date.isoformat()
+                article['published_date'] = extracted_date
                 article['date_extraction_attempted'] = True
             else:
                 article['date_extraction_attempted'] = True

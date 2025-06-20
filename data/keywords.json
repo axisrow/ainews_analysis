@@ -1,0 +1,2200 @@
+{
+  "status": "success",
+  "statistics": {
+    "total_articles": 557,
+    "total_unique_terms": 3565,
+    "date_range": {
+      "earliest": "2021-02-25T00:00:00",
+      "latest": "2025-06-20T00:00:00"
+    }
+  },
+  "keywords": [
+    {
+      "keyword": "ai applications",
+      "score": 1.7071,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 300,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "technology show promising",
+      "score": 1.1335,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 300,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "announces breakthrough in",
+      "score": 0.7742,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 300,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "technology show promising results",
+      "score": 0.7742,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 300,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "show promising results for",
+      "score": 0.7742,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 300,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "promising results for ai",
+      "score": 0.7742,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 300,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "results for ai applications",
+      "score": 0.7742,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 300,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "promising ai applications",
+      "score": 0.7006,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "show promising ai",
+      "score": 0.7006,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "openai",
+      "score": 0.6847,
+      "sources": [
+        "entity",
+        "tfidf"
+      ],
+      "frequency": 29,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "machine learning",
+      "score": 0.6492,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 110,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "artificial intelligence",
+      "score": 0.528,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 82,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "chatgpt",
+      "score": 0.5194,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "p the",
+      "score": 0.4516,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 175,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "multimodal ai",
+      "score": 0.3899,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 44,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "ai agents",
+      "score": 0.3797,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 50,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "stable diffusion",
+      "score": 0.3707,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 48,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "ai art",
+      "score": 0.3495,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "ai ethics",
+      "score": 0.3475,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "github copilot",
+      "score": 0.3342,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "the model",
+      "score": 0.3221,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 96,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "gpt technology show",
+      "score": 0.3211,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "midjourney",
+      "score": 0.3164,
+      "sources": [
+        "entity",
+        "tfidf"
+      ],
+      "frequency": 3,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "llama",
+      "score": 0.2854,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "gemini",
+      "score": 0.2846,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "claude",
+      "score": 0.2831,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "cohere announces breakthrough",
+      "score": 0.2823,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 43,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "openai announces breakthrough",
+      "score": 0.2816,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 43,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "anthropic announces breakthrough",
+      "score": 0.2812,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 43,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "dall",
+      "score": 0.2763,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "sora",
+      "score": 0.2761,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "in gpt",
+      "score": 0.2717,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 81,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "stability ai announces",
+      "score": 0.2622,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 42,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "language models",
+      "score": 0.2621,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 60,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "developments ai",
+      "score": 0.243,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "deep learning",
+      "score": 0.2407,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 32,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "google announces breakthrough",
+      "score": 0.226,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 43,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "microsoft announces breakthrough",
+      "score": 0.2253,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 43,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "meta announces breakthrough",
+      "score": 0.2247,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 43,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "p p the",
+      "score": 0.2219,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 86,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "announces breakthrough ai",
+      "score": 0.1869,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "gpt developments gpt",
+      "score": 0.1869,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "developments gpt technology",
+      "score": 0.1869,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "breakthrough gpt developments",
+      "score": 0.1869,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "generative ai",
+      "score": 0.182,
+      "sources": [
+        "tfidf",
+        "phrase"
+      ],
+      "frequency": 33,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "xbox",
+      "score": 0.1804,
+      "sources": [
+        "entity"
+      ],
+      "frequency": 23,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "training",
+      "score": 0.1783,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "the llm",
+      "score": 0.1577,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 47,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "announces breakthrough in ai",
+      "score": 0.1548,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 60,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "new developments in ai",
+      "score": 0.1548,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 60,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "announces breakthrough gpt",
+      "score": 0.1438,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "tensorflow lite",
+      "score": 0.1375,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 41,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "in chatgpt",
+      "score": 0.1375,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 41,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "in gpt technology show",
+      "score": 0.1342,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "gpt technology show promising",
+      "score": 0.1342,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "in dall e",
+      "score": 0.1342,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "in stable diffusion",
+      "score": 0.1342,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "in github copilot",
+      "score": 0.1342,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "in ai art",
+      "score": 0.1342,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "in llama",
+      "score": 0.1342,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "in midjourney",
+      "score": 0.1342,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "in ai ethics",
+      "score": 0.1342,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "in claude",
+      "score": 0.1342,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "in gemini",
+      "score": 0.1342,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "in sora",
+      "score": 0.1342,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "in ai agents",
+      "score": 0.1342,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "in multimodal ai",
+      "score": 0.1342,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "amazon",
+      "score": 0.1322,
+      "sources": [
+        "entity",
+        "tfidf"
+      ],
+      "frequency": 4,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "the ai",
+      "score": 0.1208,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 36,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "training data",
+      "score": 0.1208,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 36,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "the training",
+      "score": 0.1208,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 36,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "chain of",
+      "score": 0.1174,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 35,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "p this",
+      "score": 0.1135,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 44,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "openai announces breakthrough in",
+      "score": 0.111,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 43,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "google announces breakthrough in",
+      "score": 0.111,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 43,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "microsoft announces breakthrough in",
+      "score": 0.111,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 43,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "meta announces breakthrough in",
+      "score": 0.111,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 43,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "anthropic announces breakthrough in",
+      "score": 0.111,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 43,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "cohere announces breakthrough in",
+      "score": 0.111,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 43,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "stability ai announces breakthrough",
+      "score": 0.1084,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 42,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "neural network",
+      "score": 0.1074,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 32,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "announces breakthrough in gpt",
+      "score": 0.1032,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "breakthrough in gpt new",
+      "score": 0.1032,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "in gpt new developments",
+      "score": 0.1032,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "gpt new developments in",
+      "score": 0.1032,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "new developments in gpt",
+      "score": 0.1032,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "developments in gpt technology",
+      "score": 0.1032,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 40,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "task",
+      "score": 0.1019,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 106,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "real world",
+      "score": 0.0955,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 37,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "a large",
+      "score": 0.0955,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 37,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "a name",
+      "score": 0.0955,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 37,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "used to",
+      "score": 0.0955,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 37,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "reinforcement learning",
+      "score": 0.0939,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 28,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "pre training",
+      "score": 0.0939,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 28,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "posted by",
+      "score": 0.0929,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 36,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "dir ltr",
+      "score": 0.0929,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 36,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "model is",
+      "score": 0.0906,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 27,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "color black",
+      "score": 0.0903,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 35,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "fine tuning",
+      "score": 0.0877,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 34,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "as well",
+      "score": 0.0877,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 34,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "berkeley edu",
+      "score": 0.0877,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 34,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "use cases",
+      "score": 0.0852,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 33,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "name more a p",
+      "score": 0.0852,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 33,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "ai and",
+      "score": 0.0839,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 25,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "ai technology",
+      "score": 0.0839,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 25,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "to train",
+      "score": 0.0839,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 25,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "large language",
+      "score": 0.0826,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 32,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "open source",
+      "score": 0.0826,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 32,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "the performance",
+      "score": 0.0826,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 32,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "google research",
+      "score": 0.0826,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 32,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "border radius",
+      "score": 0.0826,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 32,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "br authors",
+      "score": 0.0826,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 32,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "the next",
+      "score": 0.08,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 31,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "to learn",
+      "score": 0.08,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 31,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "need to",
+      "score": 0.08,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 31,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "font weight",
+      "score": 0.08,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 31,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "inference",
+      "score": 0.08,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "ai news weekly - issue",
+      "score": 0.0784,
+      "sources": [
+        "entity"
+      ],
+      "frequency": 10,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "the user",
+      "score": 0.0774,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 30,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "solid border",
+      "score": 0.0774,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 30,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "research scientist",
+      "score": 0.0774,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 30,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "large language models",
+      "score": 0.0772,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 23,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "llms",
+      "score": 0.0754,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": true
+    },
+    {
+      "keyword": "different",
+      "score": 0.075,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 78,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "a single",
+      "score": 0.0748,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 29,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "set of",
+      "score": 0.0748,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 29,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "tf gnn",
+      "score": 0.0748,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 29,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "compared to",
+      "score": 0.0723,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 28,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "m p whitespace pre",
+      "score": 0.0723,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 28,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "p whitespace pre wrap",
+      "score": 0.0723,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 28,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "wrap font monospace id",
+      "score": 0.0723,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 28,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "font monospace id code",
+      "score": 0.0723,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 28,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "monospace id code output",
+      "score": 0.0723,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 28,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "radius width",
+      "score": 0.0723,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 28,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "function calling",
+      "score": 0.0723,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 28,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "part of",
+      "score": 0.0697,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 27,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "leading snug colgroup colgroup",
+      "score": 0.0697,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 27,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "snug colgroup colgroup tbody",
+      "score": 0.0697,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 27,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "colgroup colgroup tbody tr",
+      "score": 0.0697,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 27,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "many",
+      "score": 0.0683,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 71,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "health",
+      "score": 0.0673,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 70,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "due to",
+      "score": 0.0671,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 26,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "wake vision",
+      "score": 0.0671,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 26,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "state of the art",
+      "score": 0.0671,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 26,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "multi task",
+      "score": 0.0671,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 26,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "graphs",
+      "score": 0.0663,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 69,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "specific",
+      "score": 0.0654,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 68,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "like to",
+      "score": 0.0645,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 25,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "ability to",
+      "score": 0.0645,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 25,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "interested in",
+      "score": 0.0645,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 25,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "to generate",
+      "score": 0.0645,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 25,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "black font",
+      "score": 0.0645,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 25,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "nodes",
+      "score": 0.0635,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 66,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "adobe",
+      "score": 0.0627,
+      "sources": [
+        "entity"
+      ],
+      "frequency": 8,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "alt=",
+      "score": 0.0627,
+      "sources": [
+        "entity"
+      ],
+      "frequency": 8,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "the world",
+      "score": 0.0619,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 24,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "a small",
+      "score": 0.0619,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 24,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "along with",
+      "score": 0.0619,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 24,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "designed to",
+      "score": 0.0619,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 24,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "paper a",
+      "score": 0.0619,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 24,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "on device",
+      "score": 0.0619,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 24,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "none p",
+      "score": 0.0619,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 24,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "p a name more",
+      "score": 0.0619,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 24,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "font variant",
+      "score": 0.0619,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 24,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "variant normal font weight",
+      "score": 0.0619,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 24,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "font weight text decoration",
+      "score": 0.0619,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 24,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "weight text decoration none",
+      "score": 0.0619,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 24,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "white space pre",
+      "score": 0.0619,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 24,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "however",
+      "score": 0.0615,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 64,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "weather",
+      "score": 0.0606,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 63,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "like a",
+      "score": 0.0594,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 23,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "acknowledgements p",
+      "score": 0.0594,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 23,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "the graph",
+      "score": 0.0594,
+      "sources": [
+        "phrase"
+      ],
+      "frequency": 23,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "forecasting",
+      "score": 0.0567,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 59,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "size",
+      "score": 0.0567,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 59,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "figure",
+      "score": 0.0558,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 58,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "science",
+      "score": 0.0556,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "> powered",
+      "score": 0.0549,
+      "sources": [
+        "entity"
+      ],
+      "frequency": 7,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "range",
+      "score": 0.0548,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 57,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "step",
+      "score": 0.0548,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 57,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "various",
+      "score": 0.0538,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 56,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "high",
+      "score": 0.0538,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 56,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "shown",
+      "score": 0.0529,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 55,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "memory",
+      "score": 0.0529,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 55,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "existing",
+      "score": 0.0529,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 55,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "benchmark",
+      "score": 0.0529,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 55,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "blog",
+      "score": 0.0529,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 55,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "examples",
+      "score": 0.051,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 53,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "responses",
+      "score": 0.051,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 53,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "insights",
+      "score": 0.0508,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "read",
+      "score": 0.05,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "tool",
+      "score": 0.05,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 52,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "methods",
+      "score": 0.05,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 52,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "instruction",
+      "score": 0.049,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 51,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "edges",
+      "score": 0.0481,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 50,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "building",
+      "score": 0.0475,
+      "sources": [
+        "tfidf"
+      ],
+      "frequency": 0,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "standard",
+      "score": 0.0471,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 49,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "given",
+      "score": 0.0471,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 49,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "quantization",
+      "score": 0.0471,
+      "sources": [
+        "frequency"
+      ],
+      "frequency": 49,
+      "is_ai_term": false
+    },
+    {
+      "keyword": "amd",
+      "score": 0.0471,
+      "sources": [
+        "entity"
+      ],
+      "frequency": 6,
+      "is_ai_term": false
+    }
+  ],
+  "entities": [
+    [
+      "AI",
+      153
+    ],
+    [
+      "OpenAI",
+      29
+    ],
+    [
+      "Xbox",
+      23
+    ],
+    [
+      "Google",
+      16
+    ],
+    [
+      "Microsoft",
+      11
+    ],
+    [
+      "AI News Weekly - Issue",
+      10
+    ],
+    [
+      "US",
+      9
+    ],
+    [
+      "ML",
+      9
+    ],
+    [
+      "Adobe",
+      8
+    ],
+    [
+      "alt=",
+      8
+    ],
+    [
+      "> Powered",
+      7
+    ],
+    [
+      "AMD",
+      6
+    ],
+    [
+      "Nissan",
+      6
+    ],
+    [
+      "Sam Altman",
+      5
+    ],
+    [
+      "Bond",
+      5
+    ],
+    [
+      "Firefly",
+      5
+    ],
+    [
+      "Amazon",
+      4
+    ],
+    [
+      "China",
+      4
+    ],
+    [
+      "Groq",
+      4
+    ],
+    [
+      "Meta",
+      4
+    ],
+    [
+      "AWS",
+      4
+    ],
+    [
+      "Leaf",
+      4
+    ],
+    [
+      "San Francisco",
+      4
+    ],
+    [
+      "AI</a></h4",
+      4
+    ],
+    [
+      "Essentials AI",
+      4
+    ],
+    [
+      "Midjourney",
+      3
+    ],
+    [
+      "U.S.",
+      3
+    ],
+    [
+      "Huawei",
+      3
+    ],
+    [
+      "Scale AI",
+      3
+    ],
+    [
+      "LLM",
+      3
+    ],
+    [
+      "CausalML",
+      3
+    ],
+    [
+      "GPT",
+      3
+    ],
+    [
+      "Dynamiqs",
+      3
+    ],
+    [
+      "Alice &#038",
+      3
+    ],
+    [
+      "Bob",
+      3
+    ],
+    [
+      "New York",
+      3
+    ],
+    [
+      "AI Weekly",
+      3
+    ],
+    [
+      "Elon Musk",
+      3
+    ]
+  ],
+  "phrases": [
+    [
+      "for ai",
+      310
+    ],
+    [
+      "announces breakthrough",
+      300
+    ],
+    [
+      "announces breakthrough in",
+      300
+    ],
+    [
+      "breakthrough in",
+      300
+    ],
+    [
+      "new developments",
+      300
+    ],
+    [
+      "developments in",
+      300
+    ],
+    [
+      "technology show",
+      300
+    ],
+    [
+      "technology show promising",
+      300
+    ],
+    [
+      "technology show promising results",
+      300
+    ],
+    [
+      "show promising",
+      300
+    ],
+    [
+      "show promising results",
+      300
+    ],
+    [
+      "show promising results for",
+      300
+    ],
+    [
+      "promising results",
+      300
+    ],
+    [
+      "promising results for ai",
+      300
+    ],
+    [
+      "results for ai applications",
+      300
+    ],
+    [
+      "for ai applications",
+      300
+    ],
+    [
+      "ai applications",
+      300
+    ],
+    [
+      "p the",
+      175
+    ],
+    [
+      "machine learning",
+      110
+    ],
+    [
+      "the model",
+      96
+    ],
+    [
+      "p p the",
+      86
+    ],
+    [
+      "artificial intelligence",
+      82
+    ],
+    [
+      "in gpt",
+      81
+    ],
+    [
+      "language models",
+      60
+    ],
+    [
+      "announces breakthrough in ai",
+      60
+    ],
+    [
+      "breakthrough in ai",
+      60
+    ],
+    [
+      "new developments in ai",
+      60
+    ],
+    [
+      "developments in ai",
+      60
+    ],
+    [
+      "ai agents",
+      50
+    ],
+    [
+      "stable diffusion",
+      48
+    ],
+    [
+      "the llm",
+      47
+    ],
+    [
+      "p this",
+      44
+    ],
+    [
+      "multimodal ai",
+      44
+    ],
+    [
+      "openai announces",
+      43
+    ],
+    [
+      "openai announces breakthrough",
+      43
+    ],
+    [
+      "openai announces breakthrough in",
+      43
+    ],
+    [
+      "google announces",
+      43
+    ],
+    [
+      "google announces breakthrough",
+      43
+    ],
+    [
+      "google announces breakthrough in",
+      43
+    ],
+    [
+      "microsoft announces",
+      43
+    ],
+    [
+      "microsoft announces breakthrough",
+      43
+    ],
+    [
+      "microsoft announces breakthrough in",
+      43
+    ],
+    [
+      "meta announces",
+      43
+    ],
+    [
+      "meta announces breakthrough",
+      43
+    ],
+    [
+      "meta announces breakthrough in",
+      43
+    ],
+    [
+      "anthropic announces",
+      43
+    ],
+    [
+      "anthropic announces breakthrough",
+      43
+    ],
+    [
+      "anthropic announces breakthrough in",
+      43
+    ],
+    [
+      "cohere announces",
+      43
+    ],
+    [
+      "cohere announces breakthrough",
+      43
+    ]
+  ],
+  "generated_at": "2025-06-20T10:30:25.028070",
+  "metadata": {
+    "generated_at": "2025-06-20T10:30:25.030080",
+    "version": "1.0",
+    "editable": true,
+    "description": "Auto-generated keywords from AI news articles. Edit via dashboard."
+  }
+}
