@@ -67,5 +67,5 @@ ENV PYTHONUNBUFFERED=1 \
 # Expose port for Streamlit dashboard
 EXPOSE 8501
 
-# Default command
-CMD ["python", "main.py", "--help"]
+# Default command - run dashboard service
+CMD ["python", "main.py", "--dashboard"]

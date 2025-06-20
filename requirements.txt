@@ -1,41 +1,41 @@
 # Web scraping and data collection
-requests
-beautifulsoup4
-newspaper3k
-feedparser
+requests==2.32.3
+beautifulsoup4==4.13.4
+newspaper3k==0.2.8
+feedparser==6.0.11
 
 # NLP and text analysis
-spacy
-nltk
-transformers
-torch
-scikit-learn
-textblob
-google-genai[aiohttp]
+spacy==3.8.7
+nltk==3.9.1
+transformers==4.52.4
+torch==2.7.1
+scikit-learn==1.6.1
+textblob==0.19.0
+google-genai==1.16.1
 
 # Data processing and analysis
-pandas
-numpy
+pandas==2.2.3
+numpy==2.0.2
 
 # Database
-sqlalchemy
+sqlalchemy==2.0.36
 
 # Visualization and dashboard
-matplotlib
-seaborn
-plotly
-streamlit
-wordcloud
+matplotlib==3.9.3
+seaborn==0.13.2
+plotly==5.24.1
+streamlit==1.41.1
+wordcloud==1.9.4
 
 # Utilities
-python-dotenv
-tqdm
-schedule
-loguru
-python-dateutil
+python-dotenv==1.0.1
+tqdm==4.67.1
+schedule==1.2.2
+loguru==0.7.3
+python-dateutil==2.9.0.post0
 
 # Development tools
-pytest
-black
-flake8
-mypy
+pytest==8.3.4
+black==24.10.0
+flake8==7.1.1
+mypy==1.13.0

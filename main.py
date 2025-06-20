@@ -556,7 +556,9 @@ def main():
                 # Launch Streamlit dashboard
                 subprocess.run([
                     sys.executable, '-m', 'streamlit', 'run', 'dashboard.py',
-                    '--server.headless', 'false'
+                    '--server.headless', 'true',
+                    '--server.address', '0.0.0.0',
+                    '--server.port', '8501'
                 ])
             except subprocess.CalledProcessError as e:
                 logger.error(f"Failed to launch dashboard: {e}")

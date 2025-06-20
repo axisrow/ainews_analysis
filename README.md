@@ -20,13 +20,15 @@
 
 ## Установка
 
-### Вариант 1: Docker (рекомендуется)
-
 ```bash
 # Клонируйте репозиторий
 git clone <repository-url>
 cd ainews_analysis
+```
 
+### Вариант 1: Docker (рекомендуется)
+
+```bash
 # Соберите Docker образ
 docker build -t ainews-analysis .
 
@@ -36,23 +38,17 @@ docker run -v $(pwd)/data:/home/app/data ainews-analysis python main.py --help
 
 ### Вариант 2: Локальная установка
 
-1. Клонируйте репозиторий:
-```bash
-git clone <repository-url>
-cd ainews_analysis
-```
-
-2. Установите зависимости:
+1. Установите зависимости:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Скачайте языковую модель spaCy:
+2. Скачайте языковую модель spaCy:
 ```bash
 python -m spacy download en_core_web_sm
 ```
 
-4. (Опционально) Создайте .env файл для API ключей:
+3. (Опционально) Создайте .env файл для API ключей:
 ```bash
 echo "GOOGLE_API_KEY=your_api_key_here" > .env
 ```
@@ -147,7 +143,6 @@ ainews_analysis/
 ## Конфигурация
 
 Настройки проекта находятся в `config.py`:
-- Источники данных (сайты, RSS)  
 - Ключевые слова для поиска
 - Параметры NLP и GenAI анализа
 - Настройки базы данных
