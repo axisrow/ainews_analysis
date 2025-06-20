@@ -44,6 +44,7 @@ ENV/
 data/*.db
 data/*.sqlite
 data/*.csv
+!data/ai_news.db
 logs/
 
 # Reports
